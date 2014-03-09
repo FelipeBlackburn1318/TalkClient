@@ -53,6 +53,11 @@
             // 
             resources.ApplyResources(this.input, "input");
             this.input.Name = "input";
+            this.input.TextChanged += new System.EventHandler(this.input_TextChanged);
+            this.input.KeyDown += new System.Windows.Forms.KeyEventHandler(this.enterDown);
+            this.input.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.enterPress);
+            this.input.KeyUp += new System.Windows.Forms.KeyEventHandler(this.enterUp);
+            this.input.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.enterSend);
             // 
             // send
             // 
@@ -60,6 +65,7 @@
             this.send.Name = "send";
             this.send.UseVisualStyleBackColor = true;
             this.send.Click += new System.EventHandler(this.send_Click);
+            this.send.KeyDown += new System.Windows.Forms.KeyEventHandler(this.enterDown);
             // 
             // login
             // 
@@ -117,7 +123,9 @@
             this.Controls.Add(this.input);
             this.Controls.Add(this.Monitor);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "TalkClient";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.disposeall);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.disconnectOnExit);
             this.Load += new System.EventHandler(this.TalkClient_Load);
             this.ResumeLayout(false);

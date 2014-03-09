@@ -78,9 +78,7 @@ namespace TalkClient
                     if (encoder.GetString(buffer).CompareTo("USER") == 0)
                     {
                         userlist = (List<Talkuser>)bin.Deserialize(clientStream);
-                        updateUI("","List-r");
-                        foreach (Talkuser talkuser in userlist)
-                            updateUI(talkuser.Username , "List");
+                        updateUI("" , "List");
                     }
                 }
                 catch
@@ -102,9 +100,12 @@ namespace TalkClient
                 if (type.Equals("Monitor"))
                     Monitor.AppendText(text + "\n");
                 if (type.Equals("List"))
-                    List.Items.Add(text);
-                if (type.Equals("List-r"))
-                    List.Items.Clear();
+                {
+                     List.Items.Clear();
+                    foreach (Talkuser talkuser in userlist)
+                        List.Items.Add(talkuser.Username);
+                }
+                   
             }
         }
 
@@ -148,6 +149,8 @@ namespace TalkClient
             clientStream.Write(buffer, 0, buffer.Length);
             clientStream.Flush();
             input.Clear();
+            input.Select(input.SelectionStart, 0);
+            
         }
 
 
@@ -169,7 +172,42 @@ namespace TalkClient
 
         private void logout_Click(object sender, EventArgs e)
         {
+            monitorThread.Abort();
             tcpclient.Close();
+        }
+
+        private void disposeall(object sender, FormClosingEventArgs e)
+        {
+            Environment.Exit(Environment.ExitCode);
+        }
+
+        private void enterDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                input.Clear();
+        }
+
+        private void input_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void enterUp(object sender, KeyEventArgs e)
+        {
+
+        }
+
+        private void enterSend(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Return)
+            {
+                this.send.Focus();
+                this.send_Click(sender, e);
+            }
+        }
+
+        private void enterPress(object sender, KeyPressEventArgs e)
+        {    
         }
     }
 }
